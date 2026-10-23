@@ -15,7 +15,7 @@ The form can be viewed locally, but submissions are only processed by Netlify af
 
 ## Configure form notifications
 
-1. Deploy the site to Netlify. The static form in `index.html` lets Netlify detect `portfolio-note` during the build; the visible React form posts to `/`.
+1. Enable form detection in Netlify's site settings, then deploy the site. The static `data-netlify="true"` form in `index.html` lets Netlify detect `portfolio-note` during the build; the visible React form posts to `/`.
 2. In the Netlify site dashboard, open **Forms** and confirm `portfolio-note` is listed.
 3. In the site's form notification settings, add an email notification for new submissions.
 4. Submit a test inquiry on the deployed site and confirm the submission appears in Netlify and the notification arrives in your inbox.

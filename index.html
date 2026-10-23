@@ -44,7 +44,13 @@
     <title>NewPortfolio | Custom Portfolio Websites, Designed &amp; Managed</title>
   </head>
   <body>
-    <form name="portfolio-note" netlify netlify-honeypot="website" hidden>
+    <form
+      name="portfolio-note"
+      method="POST"
+      data-netlify="true"
+      data-netlify-honeypot="website"
+      hidden
+    >
       <input type="hidden" name="form-name" value="portfolio-note" />
       <input name="name" />
       <input name="field" />

@@ -123,6 +123,7 @@ h1, h2, h3, p { margin-top: 0; }
 .submit-link:disabled { cursor: wait; opacity: .65; }
 .form-reassurance { margin: 16px 0 0; color: #77786f; font: 10px var(--mono); letter-spacing: .04em; text-align: center; }
 .form-error { margin: 16px 0 0; color: #ff8f7d; font-size: 13px; line-height: 1.6; }
+.form-error a { display: inline-block; margin-top: 5px; color: var(--accent); text-underline-offset: 3px; }
 .success-state { padding: 25px 0 35px; }
 .success-kicker { display: block; margin-bottom: 22px; color: var(--muted-dark); font: 10px var(--mono); }
 .success-state h3 { margin: 0; color: var(--white); font: 600 clamp(63px, 9vw, 120px)/.8 var(--display); letter-spacing: -.1em; }

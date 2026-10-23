@@ -20,6 +20,7 @@ const initialForm: FormData = {
 };
 
 const priceDisplay = "$99";
+const fallbackEmail = "alihamoudiu18@gmail.com";
 
 const handledServices = [
   { name: "DOMAIN", status: "managed." },
@@ -148,39 +149,39 @@ function App() {
       return;
     }
 
-    const endpoint = import.meta.env.VITE_FORMSPREE_ENDPOINT?.trim();
-    if (!endpoint) {
-      setStatus("error");
-      setFormMessage("Applications aren't connected yet. Please try again later or contact the site owner.");
-      return;
-    }
-
     setStatus("loading");
     try {
-      const response = await fetch(endpoint, {
-        method: "POST",
-        headers: { Accept: "application/json", "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: form.name.trim(),
-          field: form.field.trim(),
-          contact: form.contact.trim(),
-          details: form.details.trim(),
-          _subject: `New portfolio inquiry from ${form.name.trim()}`,
-          website: form.website,
-        }),
+      const submission = new URLSearchParams({
+        "form-name": "portfolio-note",
+        name: form.name.trim(),
+        field: form.field.trim(),
+        contact: form.contact.trim(),
+        details: form.details.trim(),
+        website: form.website,
       });
-      if (!response.ok) throw new Error(`Form service returned ${response.status}`);
+      const response = await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: submission.toString(),
+      });
+      if (!response.ok) throw new Error(`Netlify Forms returned ${response.status}`);
       setStatus("success");
     } catch (error) {
       console.error("Portfolio inquiry could not be delivered.", error);
       setStatus("error");
-      setFormMessage("Your message couldn't be sent just now. Your details are still here—please try again in a moment.");
+      setFormMessage("Your message couldn't be sent. Your details are still here—please try again or email me directly.");
     }
   }
 
   const activeService = handledServices[activeStep];
   const requiredDone = Number(Boolean(form.name.trim())) + Number(Boolean(form.contact.trim()));
   const doneClass = (value: string) => (value.trim() ? "field field-done" : "field");
+  const fallbackMailto = `mailto:${fallbackEmail}?subject=${encodeURIComponent(`Portfolio inquiry from ${form.name.trim() || "website visitor"}`)}&body=${encodeURIComponent([
+    `Name: ${form.name.trim()}`,
+    `What do you do?: ${form.field.trim()}`,
+    `Contact: ${form.contact.trim()}`,
+    `Anything else?: ${form.details.trim()}`,
+  ].join("\n"))}`;
 
   return (
     <>
@@ -262,7 +263,15 @@ function App() {
                   <p>I’ll personally be in touch to learn a little about you and what you’re looking for.</p>
                 </div>
               ) : (
-                <form onSubmit={handleSubmit} noValidate>
+                <form
+                  name="portfolio-note"
+                  method="POST"
+                  data-netlify="true"
+                  data-netlify-honeypot="website"
+                  onSubmit={handleSubmit}
+                  noValidate
+                >
+                  <input type="hidden" name="form-name" value="portfolio-note" />
                   <div className="form-progress" aria-hidden="true">
                     <span>{requiredDone === 2 ? "READY" : `0${requiredDone} / 02`}</span>
                     <span className="form-progress-track"><span style={{ transform: `scaleX(${requiredDone / 2})` }} /></span>
@@ -331,7 +340,12 @@ function App() {
                       onChange={(event) => updateField("website", event.target.value)}
                     />
                   </div>
-                  {formMessage && <p className="form-error" role="alert">{formMessage}</p>}
+                  {formMessage && (
+                    <p className="form-error" role="alert">
+                      {formMessage}{" "}
+                      {status === "error" && <a href={fallbackMailto}>Email me instead ↗</a>}
+                    </p>
+                  )}
                   <button className="submit-link" type="submit" disabled={status === "loading"}>
                     <span>{status === "loading" ? "SENDING" : "GET MY PORTFOLIO"}</span>
                     <span aria-hidden="true">{status === "loading" ? "…" : "↗"}</span>

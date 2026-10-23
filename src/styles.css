@@ -141,6 +141,12 @@ h1, h2, h3, p { margin-top: 0; }
   .handled-promise { left: 9.5vw; }
 }
 
+@media (min-width: 761px) and (max-width: 1200px) {
+  .service-reveal { grid-template-columns: minmax(40px, 8vw) minmax(0, 1fr); }
+  .service-word { font-size: clamp(52px, 10vw, 120px); }
+  .service-status { grid-row: 2; grid-column: 2; justify-self: end; margin: 12px 0 0; }
+}
+
 @media (max-width: 760px) {
   .intro-scene { height: 122svh; min-height: 680px; }
   .intro-frame { min-height: 610px; }

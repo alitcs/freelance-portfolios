@@ -1,4 +1,4 @@
-# NewPortfolio
+# GetMyPortfolio
 
 A single-page portfolio creation service website built with React, TypeScript, and Vite. The application form uses Netlify Forms; no custom backend or browser email credentials are required.
 
@@ -29,4 +29,6 @@ npm run build
 npm run preview
 ```
 
-The brand name, SEO metadata, structured data, and visual theme can be updated in `src/App.tsx`, `index.html`, and `src/styles.css`. The canonical URL and sitemap use `https://newportfolio.ca/`; update them if the production domain changes.
+The brand name, SEO metadata, structured data, and visual theme can be updated in `src/App.tsx`, `index.html`, and `src/styles.css`. The canonical URL and sitemap use `https://getmyportfolio.com/`; update them if the production domain changes.
+
+`public/_redirects` forwards requests for `getmaportfolio.netlify.app` to `getmyportfolio.com`, preserving paths and query strings. Netlify host-matching redirects use `_redirects` syntax rather than `netlify.toml`.

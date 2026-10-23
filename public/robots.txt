@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://newportfolio.ca/sitemap.xml
+Sitemap: https://getmyportfolio.com/sitemap.xml

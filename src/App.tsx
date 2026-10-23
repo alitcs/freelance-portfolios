@@ -191,7 +191,7 @@ function App() {
         <section className="intro-scene" id="intro" aria-labelledby="intro-title">
           <div className="intro-frame">
             <div className="intro-top">
-              <span className="micro-brand"><span>N</span> NEWPORTFOLIO</span>
+              <span className="micro-brand"><span>G</span> GETMYPORTFOLIO</span>
               <span className="micro-index">INDEPENDENT PORTFOLIO SERVICE&nbsp; / &nbsp;001</span>
             </div>
             <div className="intro-center">
@@ -356,7 +356,7 @@ function App() {
             </div>
           </div>
           <footer className="scene-footer">
-            <a className="micro-brand" href="#intro"><span>N</span> NEWPORTFOLIO</a>
+            <a className="micro-brand" href="#intro"><span>G</span> GETMYPORTFOLIO</a>
             <span>A GOOD HOME FOR GOOD WORK.</span>
             <span>© {new Date().getFullYear()}</span>
           </footer>

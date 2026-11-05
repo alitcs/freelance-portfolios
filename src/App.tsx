@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import type { FormEvent } from "react";
+import type { CSSProperties, FormEvent } from "react";
+import { processVisuals, serviceVisuals } from "./Visuals";
 
 type FormData = {
   name: string;
@@ -69,37 +70,74 @@ function useScrollExperience() {
   }, []);
 }
 
-function useHandledServiceStep() {
+const processSteps = [
+  { title: "Tell me about you", text: "A two-minute survey. Your name, what you do, how to reach you. That's all I need to start." },
+  { title: "We hop on a call", text: "A short, friendly video call. You talk about your work, I listen and plan everything." },
+  { title: "I design & build", text: "Your site takes shape: custom design, clean code, your colors, your story. No work on your side." },
+  { title: "You review, I refine", text: "Leave notes right on the preview. I revise until it feels exactly like you." },
+  { title: "Launch & forever care", text: "Domain, hosting, security, updates. It goes live and stays looked after." },
+];
+
+const includedGroups = [
+  { label: "CREATION", items: ["Custom design, built for you", "Domain & hosting set up", "Mobile-ready and fast", "Unlimited revisions until launch"] },
+  { label: "MAINTENANCE", items: ["Hosting & SSL managed", "Backups & security checks", "Uptime monitoring", "Speed & bug fixes"] },
+  { label: "UPDATES", items: ["Swap photos, text, projects", "Add new pages when you grow", "Replies within a day", "Nothing technical, ever"] },
+];
+
+const monthlyPrice = "$X";
+
+function useSceneStep(id: string, count: number) {
   const [activeStep, setActiveStep] = useState(0);
 
   useEffect(() => {
-    const scene = document.getElementById("handled");
+    const scene = document.getElementById(id);
     if (!scene) return;
     let animationFrame = 0;
 
-    const updateActiveStep = () => {
+    const update = () => {
       if (animationFrame) return;
       animationFrame = requestAnimationFrame(() => {
-        const sceneTop = scene.getBoundingClientRect().top + window.scrollY;
-        const stepHeight = scene.offsetHeight / handledServices.length;
-        const progress = window.scrollY - sceneTop + window.innerHeight / 2;
-        const step = Math.floor(progress / stepHeight);
-        setActiveStep(Math.min(Math.max(step, 0), handledServices.length - 1));
         animationFrame = 0;
+        const top = scene.getBoundingClientRect().top + window.scrollY;
+        const span = Math.max(scene.offsetHeight - window.innerHeight, 1);
+        const g = Math.min(Math.max((window.scrollY - top) / span, 0), 0.9999);
+        scene.style.setProperty("--g", g.toFixed(4));
+        setActiveStep(Math.floor(g * count));
       });
     };
 
-    window.addEventListener("scroll", updateActiveStep, { passive: true });
-    window.addEventListener("resize", updateActiveStep);
-    updateActiveStep();
+    window.addEventListener("scroll", update, { passive: true });
+    window.addEventListener("resize", update);
+    update();
     return () => {
-      window.removeEventListener("scroll", updateActiveStep);
-      window.removeEventListener("resize", updateActiveStep);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
       if (animationFrame) cancelAnimationFrame(animationFrame);
     };
-  }, []);
+  }, [id, count]);
 
   return activeStep;
+}
+
+function useReveal() {
+  useEffect(() => {
+    const items = document.querySelectorAll(".reveal");
+    if (!("IntersectionObserver" in window)) {
+      items.forEach((item) => item.classList.add("is-in"));
+      return;
+    }
+    const observer = new IntersectionObserver(
+      (entries) => entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-in");
+          observer.unobserve(entry.target);
+        }
+      }),
+      { threshold: 0.18 },
+    );
+    items.forEach((item) => observer.observe(item));
+    return () => observer.disconnect();
+  }, []);
 }
 
 function validate(form: FormData): FormErrors {
@@ -120,7 +158,9 @@ function validate(form: FormData): FormErrors {
 
 function App() {
   useScrollExperience();
-  const activeStep = useHandledServiceStep();
+  const activeStep = useSceneStep("handled", handledServices.length);
+  const processStep = useSceneStep("process", processSteps.length);
+  useReveal();
   const [form, setForm] = useState<FormData>(initialForm);
   const [errors, setErrors] = useState<FormErrors>({});
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
@@ -201,8 +241,49 @@ function App() {
             </div>
             <div className="intro-bottom">
               <span>DESIGNED, BUILT & LOOKED AFTER FOR YOU.</span>
-              <a href="#handled"><span className="scroll-mark" aria-hidden="true">↓</span> SCROLL TO SEE</a>
+              <a href="#process"><span className="scroll-mark" aria-hidden="true">↓</span> SCROLL TO SEE</a>
               <span>NO TECHNICAL HASSLE.</span>
+            </div>
+          </div>
+        </section>
+
+        <section className="process-scene" id="process" aria-label="How it works">
+          <div className="process-sticky">
+            <div className="handled-meta">
+              <span>01 — 04&nbsp;&nbsp; / &nbsp;&nbsp;HOW IT WORKS</span>
+              <span>FIVE STEPS. ONE OF THEM IS YOURS.</span>
+            </div>
+            <div className="process-layout">
+              <div className="process-text">
+                <ol className="process-list">
+                  {processSteps.map((step, index) => (
+                    <li className={index === processStep ? "is-active" : index < processStep ? "is-past" : ""} key={step.title}>
+                      <span>0{index + 1}</span>{step.title}
+                    </li>
+                  ))}
+                </ol>
+                <p className="process-desc" key={processStep}>{processSteps[processStep].text}</p>
+              </div>
+              <div className="process-stage" aria-hidden="true">
+                {processVisuals.map((Visual, index) => (
+                  <div
+                    className={`pv${index === processStep ? " pv-active" : ""}${index < processStep ? " pv-past" : ""}`}
+                    key={index}
+                    style={{ "--i": index } as CSSProperties}
+                  >
+                    <Visual />
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="handled-footer">
+              <span>STEP 0{processStep + 1} / 0{processSteps.length}</span>
+              <span className="service-progress">
+                {processSteps.map((step, index) => (
+                  <span className={index === processStep ? "service-progress-active" : ""} key={step.title} />
+                ))}
+              </span>
+              <span>KEEP SCROLLING&nbsp; ↓</span>
             </div>
           </div>
         </section>
@@ -210,16 +291,24 @@ function App() {
         <section className="handled-scene" id="handled" aria-label="Everything handled for you">
           <div className="handled-sticky">
             <div className="handled-meta">
-              <span>01 — 02&nbsp;&nbsp; / &nbsp;&nbsp;WHAT I HANDLE</span>
+              <span>02 — 04&nbsp;&nbsp; / &nbsp;&nbsp;WHAT I HANDLE</span>
               <span>YOU GIVE ME A LITTLE. I TAKE CARE OF THE REST.</span>
             </div>
-            <h2 className="handled-promise">YOU DON'T HAVE<br />TO DO ANYTHING<span>.</span></h2>
-            <div className="service-reveal" aria-live="polite" aria-atomic="true">
-              <span className="service-count">0{activeStep + 1}&nbsp; / &nbsp;0{handledServices.length}</span>
-              <div className="service-word-wrap">
-                <p className="service-word" key={activeService.name}>{activeService.name}</p>
+            <div className="handled-layout">
+              <div className="handled-left">
+                <h2 className="handled-promise">YOU DON'T HAVE<br />TO DO ANYTHING<span>.</span></h2>
+                <div className="service-reveal" aria-live="polite" aria-atomic="true">
+                  <span className="service-count">0{activeStep + 1}&nbsp; / &nbsp;0{handledServices.length}</span>
+                  <p className="service-word" key={activeService.name}>{activeService.name}</p>
+                  <p className="service-status" key={`${activeService.name}-status`}>{activeService.status}</p>
+                </div>
               </div>
-              <p className="service-status" key={`${activeService.name}-status`}>{activeService.status}</p>
+              <div className="service-stage" aria-hidden="true" key={activeService.name}>
+                {(() => {
+                  const Visual = serviceVisuals[activeStep];
+                  return <Visual />;
+                })()}
+              </div>
             </div>
             <div className="handled-footer">
               <span>YOUR WORK, IN GOOD HANDS.</span>
@@ -234,17 +323,38 @@ function App() {
               <span>KEEP SCROLLING&nbsp; ↓</span>
             </div>
           </div>
-          <div className="service-markers" aria-hidden="true">
-            {handledServices.map((service, index) => (
-              <span data-service-step={index} key={service.name} />
-            ))}
+        </section>
+
+        <section className="pricing-scene" id="pricing" aria-labelledby="pricing-title">
+          <div className="pricing-inner">
+            <p className="pricing-kicker reveal">03 — 04&nbsp;&nbsp; / &nbsp;&nbsp;ONE SIMPLE RATE</p>
+            <h2 className="pricing-title reveal" id="pricing-title">CREATED.<br />MAINTAINED.<br /><em>UPDATED.</em></h2>
+            <div className="price-card reveal">
+              <div className="price-line">
+                <div><span className="price-big">{priceDisplay}</span><small>ONE-TIME, TO CREATE IT</small></div>
+                <span className="price-plus" aria-hidden="true">+</span>
+                <div><span className="price-big">{monthlyPrice}</span><small>PER MONTH, TO KEEP IT PERFECT</small></div>
+              </div>
+              <p className="price-note">A flat rate. No hourly billing, no surprise invoices, no hosting bills, no “plugin renewals.” Cancel anytime.</p>
+              <a className="submit-link price-cta" href="#apply"><span>START WITH A CONVERSATION</span><span aria-hidden="true">↗</span></a>
+            </div>
+            <div className="included">
+              {includedGroups.map((group, index) => (
+                <div className="included-col reveal" style={{ "--d": `${index * 120}ms` } as CSSProperties} key={group.label}>
+                  <h3>{group.label}</h3>
+                  <ul>
+                    {group.items.map((item) => <li key={item}>{item}</li>)}
+                  </ul>
+                </div>
+              ))}
+            </div>
           </div>
         </section>
 
         <section className="application-scene" id="apply" aria-labelledby="application-title">
           <div className="application-heading">
             <div>
-              <p className="application-kicker">02 — 02&nbsp;&nbsp; / &nbsp;&nbsp;THE FIRST STEP</p>
+              <p className="application-kicker">04 — 04&nbsp;&nbsp; / &nbsp;&nbsp;THE FIRST STEP</p>
               <h2 id="application-title">LET'S MAKE<br /><em>YOURS.</em></h2>
             </div>
             <p className="application-note">A few details.<br />I’ll take it from here.</p>

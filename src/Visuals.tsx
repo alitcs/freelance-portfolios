@@ -118,7 +118,7 @@ function LaunchVisual() {
             <i key={i} style={{ "--h": `${h}%`, "--n": i } as CSSProperties} />
           ))}
         </div>
-        <small className="lv-foot">100% UPTIME · LOOKED AFTER, EVERY MONTH</small>
+        <small className="lv-foot">100% UPTIME · ALWAYS LOOKED AFTER</small>
       </div>
     </Win>
   );
@@ -231,7 +231,7 @@ function UpdatesVisual() {
       <div className="sx sx-chat">
         <p className="bubble b-you">Can you swap my bio and add the new project?</p>
         <p className="bubble b-me">On it. ✓ Live in 12 minutes.</p>
-        <p className="bubble b-done">UPDATED · TODAY</p>
+        <p className="bubble b-done">UPDATED · $9 FLAT</p>
       </div>
     </Win>
   );

@@ -21,6 +21,7 @@ const initialForm: FormData = {
 };
 
 const priceDisplay = "$99";
+const updatePrice = "$9";
 const fallbackEmail = "alihamoudiu18@gmail.com";
 
 const handledServices = [
@@ -30,7 +31,7 @@ const handledServices = [
   { name: "HOSTING", status: "taken care of." },
   { name: "DEPLOYMENT", status: "handled." },
   { name: "MAINTENANCE", status: "looked after." },
-  { name: "UPDATES", status: "when you need them." },
+  { name: "UPDATES", status: "$9 flat, any size." },
 ];
 
 function useScrollExperience() {
@@ -75,13 +76,13 @@ const processSteps = [
   { title: "We hop on a call", text: "A short, friendly video call. You talk about your work, I listen and plan everything." },
   { title: "I design & build", text: "Your site takes shape: custom design, clean code, your colors, your story. No work on your side." },
   { title: "You review, I refine", text: "Leave notes right on the preview. I revise until it feels exactly like you." },
-  { title: "Launch & forever care", text: "Domain, hosting, security, updates. It goes live and stays looked after." },
+  { title: "Launch & ongoing care", text: "Domain, hosting, security. It goes live and stays looked after, and any update later is a flat $9." },
 ];
 
 const includedGroups = [
   { label: "CREATION", items: ["Custom design, built for you", "Domain & hosting set up", "Mobile-ready and fast", "Unlimited revisions until launch"] },
   { label: "MAINTENANCE", items: ["Hosting & SSL managed", "Backups & security checks", "Uptime monitoring", "Speed & bug fixes"] },
-  { label: "UPDATES", items: ["Swap photos, text, projects", "Add new pages when you grow", "Replies within a day", "Nothing technical, ever"] },
+  { label: "UPDATES", items: ["Got a new job? Add it in a day", "Swap photos, text, projects", "New pages when you grow", "$9 each, big or small"] },
 ];
 
 function useSceneStep(id: string, count: number) {
@@ -325,13 +326,15 @@ function App() {
 
         <section className="pricing-scene" id="pricing" aria-labelledby="pricing-title">
           <div className="pricing-inner">
-            <p className="pricing-kicker reveal">03 — 04&nbsp;&nbsp; / &nbsp;&nbsp;ONE-TIME FLAT FEE</p>
+            <p className="pricing-kicker reveal">03 — 04&nbsp;&nbsp; / &nbsp;&nbsp;SIMPLE, FLAT PRICING</p>
             <h2 className="pricing-title reveal" id="pricing-title">CREATED.<br />MAINTAINED.<br /><em>UPDATED.</em></h2>
             <div className="price-card reveal">
               <div className="price-line">
-                <div><span className="price-big">{priceDisplay}</span><small>ONE-TIME PAYMENT</small></div>
+                <div><span className="price-big">{priceDisplay}</span><small>ONE-TIME, TO CREATE IT</small></div>
+                <span className="price-plus" aria-hidden="true">+</span>
+                <div><span className="price-big">{updatePrice}</span><small>PER UPDATE, ANY SIZE</small></div>
               </div>
-              <p className="price-note">One flat fee, paid once. No monthly payments, hourly billing, surprise invoices, hosting bills, or “plugin renewals.”</p>
+              <p className="price-note">Pay {priceDisplay} once and your portfolio is designed, built, and launched. Whenever you need a change, from a new job to a whole new page, it’s a flat {updatePrice}. No monthly payments, no hourly billing, no surprise invoices.</p>
               <a className="submit-link price-cta" href="#apply"><span>START WITH A CONVERSATION</span><span aria-hidden="true">↗</span></a>
             </div>
             <div className="included">

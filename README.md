@@ -2,7 +2,7 @@
 
 A single-page portfolio creation service website built with React, TypeScript, and Vite. The application form uses Netlify Forms; no custom backend or browser email credentials are required.
 
-The one-time flat fee is displayed as `$99`. Update `priceDisplay` in `src/App.tsx` if the price changes.
+Pricing is a one-time `$99` creation fee plus a flat `$9` per update of any size. Change `priceDisplay` and `updatePrice` in `src/App.tsx` if prices change; a few step descriptions and visuals also mention `$9` as plain text.
 
 ## Run locally
 

@@ -84,8 +84,6 @@ const includedGroups = [
   { label: "UPDATES", items: ["Swap photos, text, projects", "Add new pages when you grow", "Replies within a day", "Nothing technical, ever"] },
 ];
 
-const monthlyPrice = "$X";
-
 function useSceneStep(id: string, count: number) {
   const [activeStep, setActiveStep] = useState(0);
 
@@ -327,15 +325,13 @@ function App() {
 
         <section className="pricing-scene" id="pricing" aria-labelledby="pricing-title">
           <div className="pricing-inner">
-            <p className="pricing-kicker reveal">03 — 04&nbsp;&nbsp; / &nbsp;&nbsp;ONE SIMPLE RATE</p>
+            <p className="pricing-kicker reveal">03 — 04&nbsp;&nbsp; / &nbsp;&nbsp;ONE-TIME FLAT FEE</p>
             <h2 className="pricing-title reveal" id="pricing-title">CREATED.<br />MAINTAINED.<br /><em>UPDATED.</em></h2>
             <div className="price-card reveal">
               <div className="price-line">
-                <div><span className="price-big">{priceDisplay}</span><small>ONE-TIME, TO CREATE IT</small></div>
-                <span className="price-plus" aria-hidden="true">+</span>
-                <div><span className="price-big">{monthlyPrice}</span><small>PER MONTH, TO KEEP IT PERFECT</small></div>
+                <div><span className="price-big">{priceDisplay}</span><small>ONE-TIME PAYMENT</small></div>
               </div>
-              <p className="price-note">A flat rate. No hourly billing, no surprise invoices, no hosting bills, no “plugin renewals.” Cancel anytime.</p>
+              <p className="price-note">One flat fee, paid once. No monthly payments, hourly billing, surprise invoices, hosting bills, or “plugin renewals.”</p>
               <a className="submit-link price-cta" href="#apply"><span>START WITH A CONVERSATION</span><span aria-hidden="true">↗</span></a>
             </div>
             <div className="included">

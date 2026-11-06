@@ -1,6 +1,6 @@
 /* ---------- Shared sticky scenes ---------- */
-.process-scene { position: relative; height: 640svh; background: var(--black); color: var(--white); }
-.handled-scene { position: relative; height: 700svh; background: var(--black); color: var(--white); }
+.process-scene { position: relative; height: 950svh; background: var(--black); color: var(--white); }
+.handled-scene { position: relative; height: 1200svh; background: var(--black); color: var(--white); }
 .process-sticky, .handled-sticky { position: sticky; top: 0; height: 100svh; min-height: 620px; overflow: hidden; }
 .process-layout, .handled-layout {
   position: absolute; inset: clamp(70px, 12vh, 110px) clamp(24px, 5vw, 82px) clamp(64px, 11vh, 100px);
@@ -222,6 +222,8 @@
 
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
+  .process-scene { height: 1400svh; }
+  .handled-scene { height: 1800svh; }
   .process-layout, .handled-layout { inset: 62px 22px 54px; grid-template-columns: 1fr; grid-template-rows: auto minmax(0, 1fr); gap: 16px; align-items: start; }
   .process-list li:not(.is-active) { display: none; }
   .process-list li { font-size: clamp(28px, 8vw, 44px); }
